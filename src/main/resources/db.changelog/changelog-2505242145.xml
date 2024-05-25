@@ -42,6 +42,7 @@
             <column name="poc_contact_number" type="varchar(10)"/>
             <column name="special" type="varchar(127)"/>
             <column name="other_details" type="varchar(127)"/>
+            <column name="photo_url" type="varchar(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>

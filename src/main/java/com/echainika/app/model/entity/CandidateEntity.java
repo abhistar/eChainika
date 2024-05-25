@@ -113,6 +113,9 @@ public class CandidateEntity {
     @Column(name = "other_details", length = 127)
     private String otherDetails;
 
+    @Column(name = "photo_url")
+    private String photoUrl;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
