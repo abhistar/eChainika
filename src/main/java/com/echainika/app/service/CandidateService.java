@@ -2,17 +2,20 @@ package com.echainika.app.service;
 
 import com.echainika.app.model.entity.CandidateEntity;
 import com.echainika.app.repository.CandidateRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CandidateService {
-    @Autowired
-    private CandidateRepository candidateRepository;
+
+    private final CandidateRepository candidateRepository;
 
     // Create
-    public CandidateEntity createCandidateEntity(CandidateEntity candidate) {
-        return candidateRepository.save(candidate);
+    public String createCandidateEntity(CandidateEntity candidate) {
+        candidateRepository.save(candidate);
+        return "Candidate profile created successfully";
     }
 
     // Read
@@ -21,12 +24,14 @@ public class CandidateService {
     }
 
     // Update
-    public CandidateEntity updateCandidateEntity(CandidateEntity candidate) {
-        return candidateRepository.save(candidate);
+    public String updateCandidateEntity(CandidateEntity candidate) {
+        candidateRepository.save(candidate);
+        return "Candidate profile updated successfully";
     }
 
     // Delete
-    public void deleteCandidateEntity(Long id) {
+    public String deleteCandidateEntity(Long id) {
         candidateRepository.deleteById(id);
+        return "Candidate profile deleted successfully";
     }
 }
