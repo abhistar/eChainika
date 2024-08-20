@@ -3,10 +3,7 @@ package com.echainika.app.model.entity;
 import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.model.enums.OccupationType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,7 +15,7 @@ import java.time.LocalTime;
 @Setter
 @ToString
 @Entity
-@NoArgsConstructor
+@Builder
 @Table(name = "candidate")
 public class CandidateEntity {
     @Id

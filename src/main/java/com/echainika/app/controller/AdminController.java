@@ -1,11 +1,13 @@
 package com.echainika.app.controller;
 
+import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,9 +23,9 @@ public class AdminController {
     }
 
     @PostMapping("/bulkUpload")
-    public ResponseEntity<List<BulkUploadResponse>> bulkUploadData(@RequestBody Object data) {
+    public ResponseEntity<BulkUploadResponse> bulkUploadData(@RequestParam MultipartFile file) {
         try {
-            return new ResponseEntity<>(adminService.bulkUploadData(data), HttpStatus.OK);
+            return new ResponseEntity<>(adminService.bulkUploadData(file), HttpStatus.OK);
         }
         catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -34,8 +36,8 @@ public class AdminController {
     }
 
     @PatchMapping("/editCandidate")
-    public ResponseEntity<String> editCandidate(@RequestBody Object data) {
-        return new ResponseEntity<>(adminService.editCandidate(data), HttpStatus.OK);
+    public ResponseEntity<String> editCandidate(@RequestBody CandidateRequest request) {
+        return new ResponseEntity<>(adminService.editCandidate(request), HttpStatus.OK);
     }
 
     @DeleteMapping("/bulkDelete")
