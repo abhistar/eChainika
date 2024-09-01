@@ -5,6 +5,7 @@ import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +23,8 @@ public class AdminController {
         return new ResponseEntity<>("Welcome to Admin!", HttpStatus.OK);
     }
 
-    @PostMapping("/bulkUpload")
-    public ResponseEntity<BulkUploadResponse> bulkUploadData(@RequestParam MultipartFile file) {
+    @PostMapping(value = "/bulkUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BulkUploadResponse> bulkUploadData(@RequestParam("file") MultipartFile file) {
         try {
             return new ResponseEntity<>(adminService.bulkUploadData(file), HttpStatus.OK);
         }

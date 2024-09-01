@@ -21,7 +21,7 @@ import java.util.List;
 @UtilityClass
 public final class ExcelUtils {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String SHEET = "Sheet 1";
+    static String SHEET = "Sheet1";
 
     public static boolean hasExcelFormat(MultipartFile file) {
         return TYPE.equals(file.getContentType());
