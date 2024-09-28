@@ -1,11 +1,14 @@
 package com.echainika.app.controller;
 
+import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,10 +23,10 @@ public class AdminController {
         return new ResponseEntity<>("Welcome to Admin!", HttpStatus.OK);
     }
 
-    @PostMapping("/bulkUpload")
-    public ResponseEntity<List<BulkUploadResponse>> bulkUploadData(@RequestBody Object data) {
+    @PostMapping(value = "/bulk", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BulkUploadResponse> bulkUploadData(@RequestParam("file") MultipartFile file) {
         try {
-            return new ResponseEntity<>(adminService.bulkUploadData(data), HttpStatus.OK);
+            return new ResponseEntity<>(adminService.bulkUploadData(file), HttpStatus.OK);
         }
         catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -33,22 +36,22 @@ public class AdminController {
         }
     }
 
-    @PatchMapping("/editCandidate")
-    public ResponseEntity<String> editCandidate(@RequestBody Object data) {
-        return new ResponseEntity<>(adminService.editCandidate(data), HttpStatus.OK);
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> editCandidate(@RequestBody CandidateRequest request) {
+        return new ResponseEntity<>(adminService.editCandidate(request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/bulkDelete")
+    @DeleteMapping("/bulk")
     public ResponseEntity<String> bulkDelete() {
         return new ResponseEntity<>(adminService.bulkDelete(), HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public ResponseEntity<Object> getAllCandidates(@RequestParam(defaultValue = "10") Integer entries, @RequestParam(defaultValue = "1") Integer page) {
         return new ResponseEntity<>(adminService.getAllCandidates(entries, page), HttpStatus.OK);
     }
 
-   @GetMapping("/bulkDownload")
+   @GetMapping("/bulk")
    public ResponseEntity<Object> bulkDownloadData() {
         return new ResponseEntity<>(adminService.bulkDownloadData(), HttpStatus.OK);
    }
