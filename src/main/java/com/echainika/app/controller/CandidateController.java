@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class CandidateController {
     private final CandidateService candidateService;
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<String> createCandidate(@RequestBody CandidateEntity candidate) {
         try {
             return new ResponseEntity<>(candidateService.createCandidateEntity(candidate), HttpStatus.OK);
@@ -26,17 +26,17 @@ public class CandidateController {
         }
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CandidateEntity> getCandidate(@PathVariable Long id) {
         return new ResponseEntity<>(candidateService.getCandidateEntityById(id), HttpStatus.OK);
     }
 
-    @PatchMapping("/update")
+    @PatchMapping("/{id}")
     public ResponseEntity<String> updateCandidate(@RequestBody CandidateEntity candidate) {
         return new ResponseEntity<>(candidateService.updateCandidateEntity(candidate), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCandidate(@PathVariable Long id) {
         return new ResponseEntity<>(candidateService.deleteCandidateEntity(id), HttpStatus.OK);
     }
