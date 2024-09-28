@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class CandidateAndErrors {
+public class CandidateValidationResult {
     private List<CandidateRequest> candidates;
     private List<Error> errors;
 }

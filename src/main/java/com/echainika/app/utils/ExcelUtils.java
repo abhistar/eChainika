@@ -1,6 +1,6 @@
 package com.echainika.app.utils;
 
-import com.echainika.app.model.CandidateAndErrors;
+import com.echainika.app.model.CandidateValidationResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.enums.MaritalStatus;
@@ -27,7 +27,7 @@ public final class ExcelUtils {
         return TYPE.equals(file.getContentType());
     }
 
-    public static CandidateAndErrors parseExcelFile(InputStream inputStream) {
+    public static CandidateValidationResult parseExcelFile(InputStream inputStream) {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(SHEET);
@@ -92,7 +92,7 @@ public final class ExcelUtils {
                 errorList.addAll(rowErrors);
             }
 
-            return CandidateAndErrors.builder().candidates(candidateList).errors(errorList).build();
+            return CandidateValidationResult.builder().candidates(candidateList).errors(errorList).build();
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file" + e.getMessage());
         }

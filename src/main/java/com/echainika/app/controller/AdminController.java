@@ -23,7 +23,7 @@ public class AdminController {
         return new ResponseEntity<>("Welcome to Admin!", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/bulkUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/bulk", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BulkUploadResponse> bulkUploadData(@RequestParam("file") MultipartFile file) {
         try {
             return new ResponseEntity<>(adminService.bulkUploadData(file), HttpStatus.OK);
@@ -36,22 +36,22 @@ public class AdminController {
         }
     }
 
-    @PatchMapping("/editCandidate")
+    @PatchMapping("/{id}")
     public ResponseEntity<String> editCandidate(@RequestBody CandidateRequest request) {
         return new ResponseEntity<>(adminService.editCandidate(request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/bulkDelete")
+    @DeleteMapping("/bulk")
     public ResponseEntity<String> bulkDelete() {
         return new ResponseEntity<>(adminService.bulkDelete(), HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public ResponseEntity<Object> getAllCandidates(@RequestParam(defaultValue = "10") Integer entries, @RequestParam(defaultValue = "1") Integer page) {
         return new ResponseEntity<>(adminService.getAllCandidates(entries, page), HttpStatus.OK);
     }
 
-   @GetMapping("/bulkDownload")
+   @GetMapping("/bulk")
    public ResponseEntity<Object> bulkDownloadData() {
         return new ResponseEntity<>(adminService.bulkDownloadData(), HttpStatus.OK);
    }
