@@ -89,7 +89,7 @@ public class CandidateEntity {
     @Column(name = "parent_income", length = 127)
     private String parentIncome;
 
-    @Column(name = "siblings", columnDefinition = "jsonb")
+    @Column(name = "siblings")
     private String siblings;
 
     @Column(name = "address")
