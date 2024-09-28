@@ -73,7 +73,7 @@ public final class ExcelUtils {
                                 candidate.setName(currentCell.getStringCellValue());
                             }
                             break;
-                        case 3: // Marital Status
+                        case 2: // Marital Status
                             errorMessage = validateMaritalStatus(currentCell.getStringCellValue());
                             if (errorMessage != null) {
                                 rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
