@@ -5,7 +5,7 @@ import com.echainika.app.model.entity.CandidateEntity;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MapperUtils {
+public final class CandidateMapperUtil {
     public static CandidateEntity candidateMapper(CandidateRequest candidate) {
         return CandidateEntity.builder()
                 .registrationNumber(candidate.getRegistrationNumber())

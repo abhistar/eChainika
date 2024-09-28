@@ -14,6 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,59 +39,55 @@ public final class ExcelUtils {
 
             List<CandidateRequest> candidateList = new ArrayList<>();
             List<Error> errorList = new ArrayList<>();
+            Iterator<Cell> topCells = null;
             int rowNumber = 0;
 
             while (rows.hasNext()) {
                 Row currentRow = rows.next();
 
-                // skip header
+                // take column names and skip header
                 if (rowNumber == 0) {
+                    topCells = currentRow.iterator();
                     rowNumber++;
                     continue;
                 }
 
                 Iterator<Cell> cells = currentRow.iterator();
 
-                CandidateRequest candidate = CandidateRequest.builder().build();
+                CandidateRequest.CandidateRequestBuilder candidateBuilder = CandidateRequest.builder();
                 List<Error> rowErrors = new ArrayList<>();
 
-                int cellIndex = 0;
                 while (cells.hasNext()) {
-                    Cell currentCell = cells.next();
-                    String errorMessage;
+                    String currentCell = cells.next().getStringCellValue();
+                    String columnCell = topCells.next().getStringCellValue();
 
-                    switch (cellIndex) {
-                        case 0: // Registration Number
-                            errorMessage = validateRegistrationNumber(currentCell.getStringCellValue());
-                            if (errorMessage != null) {
-                                rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
-                            } else {
-                                candidate.setRegistrationNumber(currentCell.getStringCellValue());
-                            }
+                    switch (columnCell) {
+                        case ValidationUtil.REGISTRATION_NUMBER:
+                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
+                                candidateBuilder.registrationNumber(currentCell);
                             break;
-                        case 1: // Name
-                            errorMessage = validateName(currentCell.getStringCellValue());
-                            if (errorMessage != null) {
-                                rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
-                            } else {
-                                candidate.setName(currentCell.getStringCellValue());
-                            }
+                        case ValidationUtil.NAME:
+                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
+                                candidateBuilder.name(currentCell);
                             break;
-                        case 2: // Marital Status
-                            errorMessage = validateMaritalStatus(currentCell.getStringCellValue());
-                            if (errorMessage != null) {
-                                rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
-                            } else {
-                                candidate.setMaritalStatus(MaritalStatus.valueOf(currentCell.getStringCellValue().toUpperCase()));
-                            }
+                        case ValidationUtil.MARITAL_STATUS:
+                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
+                                candidateBuilder.maritalStatus(MaritalStatus.valueOf(columnCell.toUpperCase()));
+                            break;
+                        case ValidationUtil.DATE_OF_BIRTH:
+                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
+                                candidateBuilder.dateOfBirth(LocalDate.parse(currentCell, DateTimeFormatter.ISO_LOCAL_DATE));
+                            break;
+                        case ValidationUtil.TIME_OF_BIRTH:
+                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
+                                candidateBuilder.timeOfBirth(LocalTime.parse(currentCell, DateTimeFormatter.ISO_LOCAL_TIME));
+                            break;
                         default:
                             break;
                     }
-
-                    cellIndex++;
                 }
                 if (rowErrors.isEmpty()) {
-                    candidateList.add(candidate);
+                    candidateList.add(candidateBuilder.build());
                 }
                 errorList.addAll(rowErrors);
             }
@@ -95,30 +95,6 @@ public final class ExcelUtils {
             return CandidateValidationResult.builder().candidates(candidateList).errors(errorList).build();
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file" + e.getMessage());
-        }
-    }
-
-
-    public static String validateRegistrationNumber(String stringCellValue) {
-        if (stringCellValue != null) return null;
-
-        return "Registration number is not present";
-    }
-
-    public static String validateName(String stringCellValue) {
-        if (stringCellValue != null) return null;
-
-        return "Name is not present";
-    }
-
-    private static String validateMaritalStatus(String stringCellValue) {
-        try {
-            MaritalStatus.valueOf(stringCellValue.toUpperCase());
-            return null;
-        } catch (NullPointerException ne) {
-            return "Marital Status not present";
-        } catch (IllegalArgumentException ie) {
-            return "Marital status does not match with any values";
         }
     }
 }
