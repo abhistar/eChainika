@@ -3,7 +3,6 @@ package com.echainika.app.utils;
 import com.echainika.app.model.CandidateValidationResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.request.CandidateRequest;
-import com.echainika.app.model.enums.MaritalStatus;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,10 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -53,41 +48,17 @@ public final class ExcelUtils {
                 }
 
                 Iterator<Cell> cells = currentRow.iterator();
-
-                CandidateRequest.CandidateRequestBuilder candidateBuilder = CandidateRequest.builder();
+                CandidateRequest candidateRequest = CandidateRequest.builder().build();
                 List<Error> rowErrors = new ArrayList<>();
 
                 while (cells.hasNext()) {
                     String currentCell = cells.next().getStringCellValue();
-                    String columnCell = topCells.next().getStringCellValue();
+                    String columnName = topCells.next().getStringCellValue();
 
-                    switch (columnCell) {
-                        case ValidationUtil.REGISTRATION_NUMBER:
-                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
-                                candidateBuilder.registrationNumber(currentCell);
-                            break;
-                        case ValidationUtil.NAME:
-                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
-                                candidateBuilder.name(currentCell);
-                            break;
-                        case ValidationUtil.MARITAL_STATUS:
-                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
-                                candidateBuilder.maritalStatus(MaritalStatus.valueOf(columnCell.toUpperCase()));
-                            break;
-                        case ValidationUtil.DATE_OF_BIRTH:
-                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
-                                candidateBuilder.dateOfBirth(LocalDate.parse(currentCell, DateTimeFormatter.ISO_LOCAL_DATE));
-                            break;
-                        case ValidationUtil.TIME_OF_BIRTH:
-                            if (ValidationUtil.COLUMN_VALIDATORS.get(columnCell).validate(rowNumber, currentCell, rowErrors))
-                                candidateBuilder.timeOfBirth(LocalTime.parse(currentCell, DateTimeFormatter.ISO_LOCAL_TIME));
-                            break;
-                        default:
-                            break;
-                    }
+                    FieldUtil.COLUMN_STRATEGY_MAP.get(columnName).set(rowNumber, currentCell, rowErrors, candidateRequest);
                 }
                 if (rowErrors.isEmpty()) {
-                    candidateList.add(candidateBuilder.build());
+                    candidateList.add(candidateRequest);
                 }
                 errorList.addAll(rowErrors);
             }

@@ -1,15 +1,13 @@
 package com.echainika.app.utils;
 
-import com.echainika.app.utils.ValidatorImpl.DateOfBirthValidator;
-import com.echainika.app.utils.ValidatorImpl.MaritalStatusValidator;
-import com.echainika.app.utils.ValidatorImpl.NameValidator;
-import com.echainika.app.utils.ValidatorImpl.RegistrationNumberValidator;
+import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.utils.StrategyManager.*;
 import lombok.experimental.UtilityClass;
 
 import java.util.Map;
 
 @UtilityClass
-public final class ValidationUtil {
+public final class FieldUtil {
     public static final String REGISTRATION_NUMBER = "registrationNumber";
     public static final String NAME = "name";
     public static final String MARITAL_STATUS = "maritalStatus";
@@ -41,11 +39,11 @@ public final class ValidationUtil {
     public static final String otherDetails = "otherDetails";
     public static final String photoUrl = "photoUrl";
 
-    public static Map<String, Validator> COLUMN_VALIDATORS = Map.of(
-            REGISTRATION_NUMBER, new RegistrationNumberValidator(),
-            NAME, new NameValidator(),
-            MARITAL_STATUS, new MaritalStatusValidator(),
-            DATE_OF_BIRTH, new DateOfBirthValidator(),
-            TIME_OF_BIRTH, new RegistrationNumberValidator()
+    public static Map<String, FieldStrategy> COLUMN_STRATEGY_MAP = Map.of(
+            REGISTRATION_NUMBER, new RegistrationNumberField(REGISTRATION_NUMBER),
+            NAME, new NameField(NAME),
+            MARITAL_STATUS, new MaritalStatusField(MARITAL_STATUS),
+            DATE_OF_BIRTH, new DateOfBirthField(DATE_OF_BIRTH),
+            TIME_OF_BIRTH, new TimeOfBirthField(TIME_OF_BIRTH)
             );
 }
