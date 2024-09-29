@@ -5,14 +5,14 @@ import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.utils.FieldStrategy;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class TimeOfBirthField extends FieldStrategy {
-    public TimeOfBirthField(String fieldName) {
-        super(fieldName);
+    public TimeOfBirthField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+        super(fieldName, setter);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class TimeOfBirthField extends FieldStrategy {
     public void set(Integer rowNumber, String cellValue, List<Error> errorList, CandidateRequest candidateRequest) {
         ValidationResult validationResult = validate(cellValue);
         if (validationResult.getIsValid()) {
-            candidateRequest.setTimeOfBirth(LocalTime.parse(cellValue, DateTimeFormatter.ISO_LOCAL_TIME));
+            ;
         } else {
             errorList.add(Error.builder().error(validationResult.getError()).rowNumber(rowNumber).build());
         }

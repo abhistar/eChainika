@@ -1,15 +1,14 @@
 package com.echainika.app.utils.StrategyManager;
 
-import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.utils.FieldStrategy;
 
-import java.util.List;
+import java.util.function.BiConsumer;
 
 public class MaritalStatusField extends FieldStrategy {
-    public MaritalStatusField(String fieldName) {
-        super(fieldName);
+    public MaritalStatusField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+        super(fieldName, setter);
     }
 
     @Override
@@ -21,16 +20,6 @@ public class MaritalStatusField extends FieldStrategy {
             return  new ValidationResult(false,super.getFieldName() + " is absent");
         } catch (IllegalArgumentException ie) {
             return  new ValidationResult(false,super.getFieldName() + " does not match with any values");
-        }
-    }
-
-    @Override
-    public void set(Integer rowNumber, String cellValue, List<Error> errorList, CandidateRequest candidateRequest) {
-        ValidationResult validationResult = validate(cellValue);
-        if (validationResult.getIsValid()) {
-            candidateRequest.setMaritalStatus(MaritalStatus.valueOf(cellValue.toUpperCase()));
-        } else {
-            errorList.add(Error.builder().error(validationResult.getError()).rowNumber(rowNumber).build());
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.echainika.app.utils;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.utils.StrategyManager.*;
 import lombok.experimental.UtilityClass;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @UtilityClass
@@ -40,10 +43,10 @@ public final class FieldUtil {
     public static final String photoUrl = "photoUrl";
 
     public static Map<String, FieldStrategy> COLUMN_STRATEGY_MAP = Map.of(
-            REGISTRATION_NUMBER, new RegistrationNumberField(REGISTRATION_NUMBER),
-            NAME, new NameField(NAME),
-            MARITAL_STATUS, new MaritalStatusField(MARITAL_STATUS),
-            DATE_OF_BIRTH, new DateOfBirthField(DATE_OF_BIRTH),
-            TIME_OF_BIRTH, new TimeOfBirthField(TIME_OF_BIRTH)
-            );
+            REGISTRATION_NUMBER, new GenericField(REGISTRATION_NUMBER, (cellValue, candidateRequest) -> candidateRequest.setRegistrationNumber(cellValue)),
+            NAME, new GenericField(NAME, (cellValue, candidateRequest) -> candidateRequest.setName(cellValue)),
+            MARITAL_STATUS, new MaritalStatusField(MARITAL_STATUS, (cellValue, candidateRequest) -> candidateRequest.setMaritalStatus(MaritalStatus.valueOf(cellValue.toUpperCase()))),
+            DATE_OF_BIRTH, new DateOfBirthField(DATE_OF_BIRTH, (cellValue, candidateRequest) -> candidateRequest.setDateOfBirth(LocalDate.parse(cellValue, DateTimeFormatter.ISO_LOCAL_DATE))),
+            TIME_OF_BIRTH, new TimeOfBirthField(TIME_OF_BIRTH, (cellValue, candidateRequest) -> candidateRequest.setTimeOfBirth(LocalTime.parse(cellValue, DateTimeFormatter.ISO_LOCAL_TIME)))
+    );
 }
