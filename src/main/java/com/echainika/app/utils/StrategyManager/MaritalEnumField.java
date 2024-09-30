@@ -6,8 +6,8 @@ import com.echainika.app.utils.FieldStrategy;
 
 import java.util.function.BiConsumer;
 
-public class MaritalStatusField extends FieldStrategy {
-    public MaritalStatusField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+public class MaritalEnumField extends FieldStrategy {
+    public MaritalEnumField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
         super(fieldName, setter);
     }
 

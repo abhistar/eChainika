@@ -1,6 +1,6 @@
 package com.echainika.app.utils;
 
-import com.echainika.app.model.CandidateValidationResult;
+import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.request.CandidateRequest;
 import lombok.experimental.UtilityClass;
@@ -8,14 +8,19 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @UtilityClass
 public final class ExcelUtils {
@@ -26,7 +31,7 @@ public final class ExcelUtils {
         return TYPE.equals(file.getContentType());
     }
 
-    public static CandidateValidationResult parseExcelFile(InputStream inputStream) {
+    public static CandidatesResult parseExcelFile(InputStream inputStream) {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(SHEET);
@@ -34,26 +39,26 @@ public final class ExcelUtils {
 
             List<CandidateRequest> candidateList = new ArrayList<>();
             List<Error> errorList = new ArrayList<>();
-            Iterator<Cell> topCells = null;
+            List<String> topCells = null;
             int rowNumber = 0;
 
             while (rows.hasNext()) {
-                Row currentRow = rows.next();
+                Row row = rows.next();
+                List<String> currentRow = IntStream.range(0, row.getLastCellNum()).mapToObj(i -> row.getCell(i).getStringCellValue()).toList();
 
                 // take column names and skip header
                 if (rowNumber == 0) {
-                    topCells = currentRow.iterator();
+                    topCells = currentRow;
                     rowNumber++;
                     continue;
                 }
 
-                Iterator<Cell> cells = currentRow.iterator();
                 CandidateRequest candidateRequest = CandidateRequest.builder().build();
                 List<Error> rowErrors = new ArrayList<>();
 
-                while (cells.hasNext()) {
-                    String currentCell = cells.next().getStringCellValue();
-                    String columnName = topCells.next().getStringCellValue();
+                for (int i = 0; i < currentRow.size(); i++) {
+                    String currentCell = currentRow.get(i);
+                    String columnName = topCells.get(i);
 
                     FieldUtil.COLUMN_STRATEGY_MAP.get(columnName).set(rowNumber, currentCell, rowErrors, candidateRequest);
                 }
@@ -63,7 +68,7 @@ public final class ExcelUtils {
                 errorList.addAll(rowErrors);
             }
 
-            return CandidateValidationResult.builder().candidates(candidateList).errors(errorList).build();
+            return CandidatesResult.builder().candidates(candidateList).errors(errorList).build();
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file" + e.getMessage());
         }

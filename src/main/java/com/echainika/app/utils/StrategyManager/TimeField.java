@@ -3,20 +3,20 @@ package com.echainika.app.utils.StrategyManager;
 import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.utils.FieldStrategy;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.function.BiConsumer;
 
-public class DateOfBirthField extends FieldStrategy {
-    public DateOfBirthField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+public class TimeField extends FieldStrategy {
+    public TimeField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
         super(fieldName, setter);
     }
 
     @Override
     public ValidationResult validate(String cellValue) {
         try {
-            LocalDate.parse(cellValue, DateTimeFormatter.ISO_LOCAL_DATE);
+            LocalTime.parse(cellValue, DateTimeFormatter.ISO_LOCAL_TIME);
             return new ValidationResult(true, "");
         } catch (DateTimeParseException de) {
             return new ValidationResult(false, super.getFieldName() + " wrong format");

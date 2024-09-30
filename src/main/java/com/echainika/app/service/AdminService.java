@@ -1,6 +1,6 @@
 package com.echainika.app.service;
 
-import com.echainika.app.model.CandidateValidationResult;
+import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.model.entity.CandidateEntity;
@@ -21,12 +21,12 @@ public class AdminService {
 
     public BulkUploadResponse bulkUploadData(MultipartFile file) {
         try {
-            CandidateValidationResult candidateValidationResult = ExcelUtils.parseExcelFile(file.getInputStream());
+            CandidatesResult candidatesResult = ExcelUtils.parseExcelFile(file.getInputStream());
 
-            candidateRepository.saveAll(candidateValidationResult.getCandidates().stream().map(CandidateMapperUtil::candidateMapper).collect(Collectors.toList()));
-            if (!candidateValidationResult.getErrors().isEmpty()) {
+            candidateRepository.saveAll(candidatesResult.getCandidates().stream().map(CandidateMapperUtil::candidateMapper).collect(Collectors.toList()));
+            if (!candidatesResult.getErrors().isEmpty()) {
                 return BulkUploadResponse.builder().message("Errors detected in more than 1 row")
-                        .errors(candidateValidationResult.getErrors()).build();
+                        .errors(candidatesResult.getErrors()).build();
             }
 
             return BulkUploadResponse.builder().message("All row processed successfully").build();
