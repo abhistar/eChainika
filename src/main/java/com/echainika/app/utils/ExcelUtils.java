@@ -1,22 +1,26 @@
 package com.echainika.app.utils;
 
-import com.echainika.app.model.CandidateValidationResult;
+import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.request.CandidateRequest;
-import com.echainika.app.model.enums.MaritalStatus;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @UtilityClass
 public final class ExcelUtils {
@@ -27,7 +31,7 @@ public final class ExcelUtils {
         return TYPE.equals(file.getContentType());
     }
 
-    public static CandidateValidationResult parseExcelFile(InputStream inputStream) {
+    public static CandidatesResult parseExcelFile(InputStream inputStream) {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(SHEET);
@@ -35,90 +39,38 @@ public final class ExcelUtils {
 
             List<CandidateRequest> candidateList = new ArrayList<>();
             List<Error> errorList = new ArrayList<>();
+            List<String> topCells = null;
             int rowNumber = 0;
 
             while (rows.hasNext()) {
-                Row currentRow = rows.next();
+                Row row = rows.next();
+                List<String> currentRow = IntStream.range(0, row.getLastCellNum()).mapToObj(i -> row.getCell(i).getStringCellValue()).toList();
 
-                // skip header
+                // take column names and skip header
                 if (rowNumber == 0) {
+                    topCells = currentRow;
                     rowNumber++;
                     continue;
                 }
 
-                Iterator<Cell> cells = currentRow.iterator();
-
-                CandidateRequest candidate = CandidateRequest.builder().build();
+                CandidateRequest candidateRequest = CandidateRequest.builder().build();
                 List<Error> rowErrors = new ArrayList<>();
 
-                int cellIndex = 0;
-                while (cells.hasNext()) {
-                    Cell currentCell = cells.next();
-                    String errorMessage;
+                for (int i = 0; i < currentRow.size(); i++) {
+                    String currentCell = currentRow.get(i);
+                    String columnName = topCells.get(i);
 
-                    switch (cellIndex) {
-                        case 0: // Registration Number
-                            errorMessage = validateRegistrationNumber(currentCell.getStringCellValue());
-                            if (errorMessage != null) {
-                                rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
-                            } else {
-                                candidate.setRegistrationNumber(currentCell.getStringCellValue());
-                            }
-                            break;
-                        case 1: // Name
-                            errorMessage = validateName(currentCell.getStringCellValue());
-                            if (errorMessage != null) {
-                                rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
-                            } else {
-                                candidate.setName(currentCell.getStringCellValue());
-                            }
-                            break;
-                        case 2: // Marital Status
-                            errorMessage = validateMaritalStatus(currentCell.getStringCellValue());
-                            if (errorMessage != null) {
-                                rowErrors.add(Error.builder().error(errorMessage).rowNumber(rowNumber).build());
-                            } else {
-                                candidate.setMaritalStatus(MaritalStatus.valueOf(currentCell.getStringCellValue().toUpperCase()));
-                            }
-                        default:
-                            break;
-                    }
-
-                    cellIndex++;
+                    FieldUtil.COLUMN_STRATEGY_MAP.get(columnName).set(rowNumber, currentCell, rowErrors, candidateRequest);
                 }
                 if (rowErrors.isEmpty()) {
-                    candidateList.add(candidate);
+                    candidateList.add(candidateRequest);
                 }
                 errorList.addAll(rowErrors);
             }
 
-            return CandidateValidationResult.builder().candidates(candidateList).errors(errorList).build();
+            return CandidatesResult.builder().candidates(candidateList).errors(errorList).build();
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file" + e.getMessage());
-        }
-    }
-
-
-    public static String validateRegistrationNumber(String stringCellValue) {
-        if (stringCellValue != null) return null;
-
-        return "Registration number is not present";
-    }
-
-    public static String validateName(String stringCellValue) {
-        if (stringCellValue != null) return null;
-
-        return "Name is not present";
-    }
-
-    private static String validateMaritalStatus(String stringCellValue) {
-        try {
-            MaritalStatus.valueOf(stringCellValue.toUpperCase());
-            return null;
-        } catch (NullPointerException ne) {
-            return "Marital Status not present";
-        } catch (IllegalArgumentException ie) {
-            return "Marital status does not match with any values";
         }
     }
 }

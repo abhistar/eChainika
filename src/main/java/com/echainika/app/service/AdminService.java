@@ -1,12 +1,12 @@
 package com.echainika.app.service;
 
-import com.echainika.app.model.CandidateValidationResult;
+import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.model.entity.CandidateEntity;
 import com.echainika.app.repository.CandidateRepository;
 import com.echainika.app.utils.ExcelUtils;
-import com.echainika.app.utils.MapperUtils;
+import com.echainika.app.utils.CandidateMapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,12 +21,12 @@ public class AdminService {
 
     public BulkUploadResponse bulkUploadData(MultipartFile file) {
         try {
-            CandidateValidationResult candidateValidationResult = ExcelUtils.parseExcelFile(file.getInputStream());
+            CandidatesResult candidatesResult = ExcelUtils.parseExcelFile(file.getInputStream());
 
-            candidateRepository.saveAll(candidateValidationResult.getCandidates().stream().map(MapperUtils::candidateMapper).collect(Collectors.toList()));
-            if (!candidateValidationResult.getErrors().isEmpty()) {
+            candidateRepository.saveAll(candidatesResult.getCandidates().stream().map(CandidateMapperUtil::candidateMapper).collect(Collectors.toList()));
+            if (!candidatesResult.getErrors().isEmpty()) {
                 return BulkUploadResponse.builder().message("Errors detected in more than 1 row")
-                        .errors(candidateValidationResult.getErrors()).build();
+                        .errors(candidatesResult.getErrors()).build();
             }
 
             return BulkUploadResponse.builder().message("All row processed successfully").build();
@@ -37,7 +37,7 @@ public class AdminService {
 
     public String editCandidate(CandidateRequest candidateRequest) {
         CandidateEntity candidate = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
-        MapperUtils.updateCandidateMapper(candidateRequest, candidate);
+        CandidateMapperUtil.updateCandidateMapper(candidateRequest, candidate);
         candidateRepository.save(candidate);
         return "Candidate data edited successfully";
     }
