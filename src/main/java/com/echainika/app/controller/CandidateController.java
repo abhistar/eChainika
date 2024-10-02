@@ -1,5 +1,6 @@
 package com.echainika.app.controller;
 
+import com.echainika.app.model.dto.request.CandidateRequest;
 import com.echainika.app.model.entity.CandidateEntity;
 import com.echainika.app.service.CandidateService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,9 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @PostMapping("/")
-    public ResponseEntity<String> createCandidate(@RequestBody CandidateEntity candidate) {
+    public ResponseEntity<String> createCandidate(@RequestBody CandidateRequest candidate) {
         try {
-            return new ResponseEntity<>(candidateService.createCandidateEntity(candidate), HttpStatus.OK);
+            return new ResponseEntity<>(candidateService.createCandidate(candidate), HttpStatus.OK);
         }
         catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -28,16 +29,16 @@ public class CandidateController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CandidateEntity> getCandidate(@PathVariable Long id) {
-        return new ResponseEntity<>(candidateService.getCandidateEntityById(id), HttpStatus.OK);
+        return new ResponseEntity<>(candidateService.getCandidateById(id), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateCandidate(@RequestBody CandidateEntity candidate) {
-        return new ResponseEntity<>(candidateService.updateCandidateEntity(candidate), HttpStatus.OK);
+    public ResponseEntity<String> updateCandidate(@RequestBody CandidateRequest candidate) {
+        return new ResponseEntity<>(candidateService.updateCandidate(candidate), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCandidate(@PathVariable Long id) {
-        return new ResponseEntity<>(candidateService.deleteCandidateEntity(id), HttpStatus.OK);
+        return new ResponseEntity<>(candidateService.deleteCandidate(id), HttpStatus.OK);
     }
 }

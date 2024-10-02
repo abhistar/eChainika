@@ -15,8 +15,10 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @ToString
-@Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name = "candidate")
 public class CandidateEntity {
     @Id
