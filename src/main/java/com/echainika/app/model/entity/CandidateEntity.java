@@ -15,7 +15,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @ToString
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

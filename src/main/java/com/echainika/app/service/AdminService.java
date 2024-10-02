@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +24,7 @@ public class AdminService {
         try {
             CandidatesResult candidatesResult = ExcelUtils.parseExcelFile(file.getInputStream());
 
-            candidateRepository.saveAll(candidatesResult.getCandidates().stream().map(CandidateMapperUtil::candidateMapper).collect(Collectors.toList()));
+            candidateRepository.saveAll(candidatesResult.getCandidates().stream().map(cd -> updateOrCreate(cd, candidateRepository)).collect(Collectors.toList()));
             if (!candidatesResult.getErrors().isEmpty()) {
                 return BulkUploadResponse.builder().message("Errors detected in more than 1 row")
                         .errors(candidatesResult.getErrors()).build();
@@ -33,13 +34,6 @@ public class AdminService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to store data" + e.getMessage());
         }
-    }
-
-    public String editCandidate(CandidateRequest candidateRequest) {
-        CandidateEntity candidate = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
-        CandidateMapperUtil.updateCandidateMapper(candidateRequest, candidate);
-        candidateRepository.save(candidate);
-        return "Candidate data edited successfully";
     }
 
     public String bulkDelete() {
@@ -54,5 +48,14 @@ public class AdminService {
 
     public String bulkDownloadData() {
         return "Downloading data...";
+    }
+
+    private CandidateEntity updateOrCreate(CandidateRequest candidateRequest, CandidateRepository candidateRepository) {
+        List<CandidateEntity> candidateEntityList = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
+
+        if (!(candidateEntityList == null || candidateEntityList.isEmpty())) {
+            return CandidateMapperUtil.updateCandidateMapper(candidateRequest, candidateEntityList.get(0));
+        }
+        return CandidateMapperUtil.candidateMapper(candidateRequest);
     }
 }
