@@ -1,11 +1,11 @@
 package com.echainika.app.model.dto.request;
 
 
+import com.echainika.app.model.enums.Gender;
 import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.model.enums.OccupationType;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,7 +14,9 @@ import java.time.LocalTime;
 @Builder
 public class CandidateRequest {
     private String registrationNumber;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private Gender gender;
     private MaritalStatus maritalStatus;
     private LocalDate dateOfBirth;
     private LocalTime timeOfBirth;

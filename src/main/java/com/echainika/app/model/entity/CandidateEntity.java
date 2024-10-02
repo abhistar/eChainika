@@ -1,5 +1,6 @@
 package com.echainika.app.model.entity;
 
+import com.echainika.app.model.enums.Gender;
 import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.model.enums.OccupationType;
 import jakarta.persistence.*;
@@ -26,9 +27,17 @@ public class CandidateEntity {
     @Column(name = "registration_number", nullable = false)
     private String registrationNumber;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
 
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", length = 15)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "marital_status")
     private MaritalStatus maritalStatus;
 
@@ -44,6 +53,7 @@ public class CandidateEntity {
     @Column(name = "education")
     private String education;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "occupation_type", length = 15)
     private OccupationType occupationType;
 
@@ -80,6 +90,7 @@ public class CandidateEntity {
     @Column(name = "mother_name")
     private String motherName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "parent_occupation_type", length = 15)
     private OccupationType parentOccupationType;
 

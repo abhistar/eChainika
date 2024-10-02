@@ -12,9 +12,11 @@
             <column name="registration_number" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="first_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="gender" type="varchar(15)"/>
             <column name="marital_status" type="varchar(15)"/>
             <column name="dob" type="DATE"/>
             <column name="tob" type="TIME"/>

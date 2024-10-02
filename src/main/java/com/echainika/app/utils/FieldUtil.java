@@ -1,5 +1,6 @@
 package com.echainika.app.utils;
 
+import com.echainika.app.model.enums.Gender;
 import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.model.enums.OccupationType;
 import com.echainika.app.utils.StrategyManager.*;
@@ -13,7 +14,9 @@ import java.util.Map;
 @UtilityClass
 public final class FieldUtil {
     public static final String REGISTRATION_NUMBER = "registrationNumber";
-    public static final String NAME = "name";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String GENDER = "gender";
     public static final String MARITAL_STATUS = "maritalStatus";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
     public static final String TIME_OF_BIRTH = "timeOfBirth";
@@ -45,13 +48,15 @@ public final class FieldUtil {
 
     public static Map<String, FieldStrategy> COLUMN_STRATEGY_MAP = Map.ofEntries(
             Map.entry(REGISTRATION_NUMBER, new GenericField(REGISTRATION_NUMBER, (cv, cr) -> cr.setRegistrationNumber(cv))),
-            Map.entry(NAME, new GenericField(NAME, (cv, cr) -> cr.setName(cv))),
-            Map.entry(MARITAL_STATUS, new MaritalEnumField(MARITAL_STATUS, (cv, cr) -> cr.setMaritalStatus(MaritalStatus.valueOf(cv.toUpperCase())))),
+            Map.entry(FIRST_NAME, new GenericField(FIRST_NAME, (cv, cr) -> cr.setFirstName(cv))),
+            Map.entry(LAST_NAME, new GenericField(LAST_NAME, (cv, cr) -> cr.setLastName(cv))),
+            Map.entry(GENDER, new EnumField(GENDER, (cv, cr) -> cr.setGender(Gender.valueOf(cv.toUpperCase())))),
+            Map.entry(MARITAL_STATUS, new EnumField(MARITAL_STATUS, (cv, cr) -> cr.setMaritalStatus(MaritalStatus.valueOf(cv.toUpperCase())))),
             Map.entry(DATE_OF_BIRTH, new DateField(DATE_OF_BIRTH, (cv, cr) -> cr.setDateOfBirth(LocalDate.parse(cv, DateTimeFormatter.ISO_LOCAL_DATE)))),
             Map.entry(TIME_OF_BIRTH, new TimeField(TIME_OF_BIRTH, (cv, cr) -> cr.setTimeOfBirth(LocalTime.parse(cv, DateTimeFormatter.ISO_LOCAL_TIME)))),
             Map.entry(PLACE_OF_BIRTH, new GenericField(PLACE_OF_BIRTH, (cv, cr) -> cr.setPlaceOfBirth(cv))),
             Map.entry(EDUCATION, new GenericField(EDUCATION, (cv, cr) -> cr.setEducation(cv))),
-            Map.entry(OCCUPATION_TYPE, new OccupationEnumField(OCCUPATION_TYPE, (cv, cr) -> cr.setOccupationType(OccupationType.valueOf(cv.toUpperCase())))),
+            Map.entry(OCCUPATION_TYPE, new EnumField(OCCUPATION_TYPE, (cv, cr) -> cr.setOccupationType(OccupationType.valueOf(cv.toUpperCase())))),
             Map.entry(OCCUPATION_DETAIL, new GenericField(OCCUPATION_DETAIL, (cv, cr) -> cr.setOccupationDetail(cv))),
             Map.entry(INCOME, new GenericField(INCOME, (cv, cr) -> cr.setIncome(cv))),
             Map.entry(HEIGHT, new GenericField(HEIGHT, (cv, cr) -> cr.setHeight(cv))),
@@ -63,7 +68,7 @@ public final class FieldUtil {
             Map.entry(MAMA_GOTRA, new GenericField(MAMA_GOTRA, (cv, cr) -> cr.setMamaGotra(cv))),
             Map.entry(FATHER_NAME, new GenericField(FATHER_NAME, (cv, cr) -> cr.setFatherName(cv))),
             Map.entry(MOTHER_NAME, new GenericField(MOTHER_NAME, (cv, cr) -> cr.setMotherName(cv))),
-            Map.entry(PARENT_OCCUPATION_TYPE, new OccupationEnumField(PARENT_OCCUPATION_TYPE, (cv, cr) -> cr.setParentOccupationType(OccupationType.valueOf(cv.toUpperCase())))),
+            Map.entry(PARENT_OCCUPATION_TYPE, new EnumField(PARENT_OCCUPATION_TYPE, (cv, cr) -> cr.setParentOccupationType(OccupationType.valueOf(cv.toUpperCase())))),
             Map.entry(PARENT_OCCUPATION_DETAIL, new GenericField(PARENT_OCCUPATION_DETAIL, (cv, cr) -> cr.setParentOccupationDetail(cv))),
             Map.entry(PARENT_INCOME, new GenericField(PARENT_INCOME, (cv, cr) -> cr.setParentIncome(cv))),
             Map.entry(SIBLINGS, new GenericField(SIBLINGS, (cv, cr) -> cr.setSiblings(cv))),
