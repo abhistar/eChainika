@@ -1,6 +1,6 @@
 package com.echainika.app.utils.StrategyManager;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
 import com.echainika.app.utils.FieldStrategy;
 
 import java.time.LocalTime;
@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.function.BiConsumer;
 
 public class TimeField extends FieldStrategy {
-    public TimeField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+    public TimeField(String fieldName, BiConsumer<String, CandidateData> setter) {
         super(fieldName, setter);
     }
 

@@ -1,4 +1,4 @@
-package com.echainika.app.model.dto.request;
+package com.echainika.app.model.dto;
 
 
 import com.echainika.app.model.enums.Gender;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 @Data
 @Builder
-public class CandidateRequest {
+public class CandidateData {
     private String registrationNumber;
     private String firstName;
     private String lastName;

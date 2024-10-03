@@ -1,6 +1,6 @@
 package com.echainika.app.service;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
 import com.echainika.app.model.entity.CandidateEntity;
 import com.echainika.app.repository.CandidateRepository;
 import com.echainika.app.utils.CandidateMapperUtil;
@@ -14,7 +14,7 @@ public class CandidateService {
     private final CandidateRepository candidateRepository;
 
     // Create
-    public String createCandidate(CandidateRequest candidate) {
+    public String createCandidate(CandidateData candidate) {
         candidateRepository.save(CandidateMapperUtil.candidateMapper(candidate));
         return "Candidate profile created successfully";
     }
@@ -25,7 +25,7 @@ public class CandidateService {
     }
 
     // Update
-    public String updateCandidate(CandidateRequest candidate) {
+    public String updateCandidate(CandidateData candidate) {
         candidateRepository.save(CandidateMapperUtil.candidateMapper(candidate));
         return "Candidate profile updated successfully";
     }

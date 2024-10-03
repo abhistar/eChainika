@@ -1,6 +1,6 @@
 package com.echainika.app.controller;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
 import com.echainika.app.model.entity.CandidateEntity;
 import com.echainika.app.service.CandidateService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @PostMapping("/")
-    public ResponseEntity<String> createCandidate(@RequestBody CandidateRequest candidate) {
+    public ResponseEntity<String> createCandidate(@RequestBody CandidateData candidate) {
         try {
             return new ResponseEntity<>(candidateService.createCandidate(candidate), HttpStatus.OK);
         }
@@ -33,7 +33,7 @@ public class CandidateController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateCandidate(@RequestBody CandidateRequest candidate) {
+    public ResponseEntity<String> updateCandidate(@RequestBody CandidateData candidate) {
         return new ResponseEntity<>(candidateService.updateCandidate(candidate), HttpStatus.OK);
     }
 
