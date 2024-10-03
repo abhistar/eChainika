@@ -36,11 +36,6 @@ public class AdminController {
         }
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> editCandidate(@RequestBody CandidateRequest request) {
-        return new ResponseEntity<>(adminService.editCandidate(request), HttpStatus.OK);
-    }
-
     @DeleteMapping("/bulk")
     public ResponseEntity<String> bulkDelete() {
         return new ResponseEntity<>(adminService.bulkDelete(), HttpStatus.OK);
