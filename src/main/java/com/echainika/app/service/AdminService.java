@@ -24,7 +24,7 @@ public class AdminService {
         try {
             CandidatesResult candidatesResult = ExcelUtils.parseExcelFile(file.getInputStream());
 
-            candidateRepository.saveAll(candidatesResult.getCandidates().stream().map(this::updateOrCreate).collect(Collectors.toList()));
+            candidateRepository.saveAll(candidatesResult.getCandidates().stream().map(this::createOrUpdate).collect(Collectors.toList()));
             if (!candidatesResult.getErrors().isEmpty()) {
                 return BulkUploadResponse.builder().message("Errors detected in more than 1 row")
                         .errors(candidatesResult.getErrors()).build();
@@ -50,12 +50,12 @@ public class AdminService {
         return "Downloading data...";
     }
 
-    private CandidateEntity updateOrCreate(CandidateRequest candidateRequest) {
+    private CandidateEntity createOrUpdate(CandidateRequest candidateRequest) {
         List<CandidateEntity> candidateEntityList = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
 
-        if (!(candidateEntityList == null || candidateEntityList.isEmpty())) {
-            return CandidateMapperUtil.updateCandidateMapper(candidateRequest, candidateEntityList.get(0));
+        if (candidateEntityList == null || candidateEntityList.isEmpty()) {
+            return CandidateMapperUtil.candidateMapper(candidateRequest);
         }
-        return CandidateMapperUtil.candidateMapper(candidateRequest);
+        return CandidateMapperUtil.updateCandidateMapper(candidateRequest, candidateEntityList.get(0));
     }
 }
