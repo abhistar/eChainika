@@ -3,24 +3,20 @@ package com.echainika.app.utils;
 import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.entity.CandidateEntity;
 import lombok.experimental.UtilityClass;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @UtilityClass
 public final class ExcelUtils {
@@ -72,5 +68,9 @@ public final class ExcelUtils {
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file" + e.getMessage());
         }
+    }
+
+    public static byte[] generateExcelFile(List<CandidateEntity> candidateEntities) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("This feature will be added later");
     }
 }
