@@ -3,6 +3,7 @@ package com.echainika.app.utils;
 import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.CandidateData;
+import com.echainika.app.model.entity.CandidateEntity;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
