@@ -49,7 +49,7 @@ public final class CandidateMapperUtil {
                 .build();
     }
 
-    public static CandidateEntity updateCandidateMapper(CandidateRequest candidateRequest, CandidateEntity candidateEntity) {
+    public static CandidateEntity updateCandidateMapper(CandidateData candidateRequest, CandidateEntity candidateEntity) {
         CandidateEntity.CandidateEntityBuilder candidateEntityBuilder = candidateEntity.toBuilder();
 
         candidateEntityBuilder

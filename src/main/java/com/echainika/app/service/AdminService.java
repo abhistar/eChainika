@@ -49,13 +49,10 @@ public class AdminService {
     public AllCandidatesResponse getAllCandidates(Integer numberOfEntries, Integer pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, numberOfEntries);
         Page<CandidateEntity> candidates = candidateRepository.findAll(pageable);
-        int startIndex = pageNumber*numberOfEntries + 1;
 
         return AllCandidatesResponse.builder()
                 .candidates(candidates.stream().map(CandidateMapperUtil::candidateMapper).toList())
-                .totalCandidates(candidates.getTotalElements())
-                .startIndex(startIndex)
-                .endIndex(startIndex + candidates.getNumberOfElements())
+                .totalPages(candidates.getTotalPages())
                 .build();
     }
 
@@ -63,7 +60,7 @@ public class AdminService {
         return "Downloading data...";
     }
 
-    private CandidateEntity createOrUpdate(CandidateRequest candidateRequest) {
+    private CandidateEntity createOrUpdate(CandidateData candidateRequest) {
         List<CandidateEntity> candidateEntityList = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
 
         if (candidateEntityList == null || candidateEntityList.isEmpty()) {

@@ -1,7 +1,7 @@
 package com.echainika.app.utils.StrategyManager;
-
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
 import com.echainika.app.utils.FieldStrategy;
+
 
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class PhoneField extends FieldStrategy {
 
-    public PhoneField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+    public PhoneField(String fieldName, BiConsumer<String, CandidateData> setter) {
         super(fieldName, setter);
     }
 

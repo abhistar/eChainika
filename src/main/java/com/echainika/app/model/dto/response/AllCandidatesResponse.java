@@ -10,7 +10,5 @@ import java.util.List;
 @Data
 public class AllCandidatesResponse {
     private List<CandidateData> candidates;
-    private Long totalCandidates;
-    private Integer startIndex;
-    private Integer endIndex;
+    private Integer totalPages;
 }
