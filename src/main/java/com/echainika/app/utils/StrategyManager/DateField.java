@@ -1,6 +1,6 @@
 package com.echainika.app.utils.StrategyManager;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
 import com.echainika.app.utils.FieldStrategy;
 
 import java.time.LocalDate;
@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.function.BiConsumer;
 
 public class DateField extends FieldStrategy {
-    public DateField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+    public DateField(String fieldName, BiConsumer<String, CandidateData> setter) {
         super(fieldName, setter);
     }
 

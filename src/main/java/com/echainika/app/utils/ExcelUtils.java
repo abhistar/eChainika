@@ -2,8 +2,7 @@ package com.echainika.app.utils;
 
 import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.Error;
-import com.echainika.app.model.dto.request.CandidateRequest;
-import com.echainika.app.model.entity.CandidateEntity;
+import com.echainika.app.model.dto.CandidateData;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -33,7 +32,7 @@ public final class ExcelUtils {
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
 
-            List<CandidateRequest> candidateList = new ArrayList<>();
+            List<CandidateData> candidateList = new ArrayList<>();
             List<Error> errorList = new ArrayList<>();
             List<String> topCells = null;
             int rowNumber = 0;
@@ -49,17 +48,17 @@ public final class ExcelUtils {
                     continue;
                 }
 
-                CandidateRequest candidateRequest = CandidateRequest.builder().build();
+                CandidateData candidateData = CandidateData.builder().build();
                 List<Error> rowErrors = new ArrayList<>();
 
                 for (int i = 0; i < currentRow.size(); i++) {
                     String currentCell = currentRow.get(i);
                     String columnName = topCells.get(i);
 
-                    FieldUtil.COLUMN_STRATEGY_MAP.get(columnName).set(rowNumber, currentCell, rowErrors, candidateRequest);
+                    FieldUtil.COLUMN_STRATEGY_MAP.get(columnName).set(rowNumber, currentCell, rowErrors, candidateData);
                 }
                 if (rowErrors.isEmpty()) {
-                    candidateList.add(candidateRequest);
+                    candidateList.add(candidateData);
                 }
                 errorList.addAll(rowErrors);
             }
