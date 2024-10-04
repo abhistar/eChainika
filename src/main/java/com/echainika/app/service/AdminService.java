@@ -56,8 +56,10 @@ public class AdminService {
                 .build();
     }
 
-    public String bulkDownloadData() {
-        return "Downloading data...";
+    public byte[] bulkDownloadData() {
+        // TODO: add logic here if necessary later
+        List<CandidateEntity> candidateEntities = candidateRepository.findAll();
+        return ExcelUtils.generateExcelFile(candidateEntities);
     }
 
     private CandidateEntity createOrUpdate(CandidateData candidateRequest) {

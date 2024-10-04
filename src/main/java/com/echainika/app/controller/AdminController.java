@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -48,7 +46,7 @@ public class AdminController {
     }
 
    @GetMapping("/bulk")
-   public ResponseEntity<Object> bulkDownloadData() {
+   public ResponseEntity<byte[]> bulkDownloadData() {
         return new ResponseEntity<>(adminService.bulkDownloadData(), HttpStatus.OK);
    }
 }

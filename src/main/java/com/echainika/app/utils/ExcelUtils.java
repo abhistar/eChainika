@@ -3,6 +3,7 @@ package com.echainika.app.utils;
 import com.echainika.app.model.CandidatesResult;
 import com.echainika.app.model.Error;
 import com.echainika.app.model.dto.CandidateData;
+import com.echainika.app.model.entity.CandidateEntity;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -67,5 +68,9 @@ public final class ExcelUtils {
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file" + e.getMessage());
         }
+    }
+
+    public static byte[] generateExcelFile(List<CandidateEntity> candidateEntities) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("This feature will be added later");
     }
 }
