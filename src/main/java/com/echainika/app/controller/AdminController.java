@@ -1,6 +1,7 @@
 package com.echainika.app.controller;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
+import com.echainika.app.model.dto.response.AllCandidatesResponse;
 import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class AdminController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> getAllCandidates(@RequestParam(defaultValue = "10") Integer entries, @RequestParam(defaultValue = "1") Integer page) {
+    public ResponseEntity<AllCandidatesResponse> getAllCandidates(@RequestParam(defaultValue = "10") Integer entries, @RequestParam(defaultValue = "0") Integer page) {
         return new ResponseEntity<>(adminService.getAllCandidates(entries, page), HttpStatus.OK);
     }
 

@@ -1,13 +1,17 @@
 package com.echainika.app.service;
 
 import com.echainika.app.model.CandidatesResult;
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
+import com.echainika.app.model.dto.response.AllCandidatesResponse;
 import com.echainika.app.model.dto.response.BulkUploadResponse;
 import com.echainika.app.model.entity.CandidateEntity;
 import com.echainika.app.repository.CandidateRepository;
 import com.echainika.app.utils.ExcelUtils;
 import com.echainika.app.utils.CandidateMapperUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,15 +46,21 @@ public class AdminService {
     }
 
 
-    public String getAllCandidates(Integer numberOfEntries, Integer pageNumber) {
-        return String.format("Giving %d entries in page number %d", numberOfEntries, pageNumber);
+    public AllCandidatesResponse getAllCandidates(Integer numberOfEntries, Integer pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, numberOfEntries);
+        Page<CandidateEntity> candidates = candidateRepository.findAll(pageable);
+
+        return AllCandidatesResponse.builder()
+                .candidates(candidates.stream().map(CandidateMapperUtil::candidateMapper).toList())
+                .totalPages(candidates.getTotalPages())
+                .build();
     }
 
     public String bulkDownloadData() {
         return "Downloading data...";
     }
 
-    private CandidateEntity createOrUpdate(CandidateRequest candidateRequest) {
+    private CandidateEntity createOrUpdate(CandidateData candidateRequest) {
         List<CandidateEntity> candidateEntityList = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
 
         if (candidateEntityList == null || candidateEntityList.isEmpty()) {

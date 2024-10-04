@@ -1,6 +1,6 @@
 package com.echainika.app.utils.StrategyManager;
 
-import com.echainika.app.model.dto.request.CandidateRequest;
+import com.echainika.app.model.dto.CandidateData;
 import com.echainika.app.model.enums.Gender;
 import com.echainika.app.model.enums.MaritalStatus;
 import com.echainika.app.model.enums.OccupationType;
@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
 import static com.echainika.app.utils.FieldUtil.*;
 
 public class EnumField extends FieldStrategy {
-    public EnumField(String fieldName, BiConsumer<String, CandidateRequest> setter) {
+    public EnumField(String fieldName, BiConsumer<String, CandidateData> setter) {
         super(fieldName, setter);
     }
 
