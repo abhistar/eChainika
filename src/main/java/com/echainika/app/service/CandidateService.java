@@ -15,7 +15,7 @@ public class CandidateService {
 
     // Create
     public String createCandidate(CandidateData candidate) {
-        candidateRepository.save(CandidateMapperUtil.candidateMapper(candidate));
+        candidateRepository.save(CandidateMapperUtil.candidateDataToEntity(candidate));
         return "Candidate profile created successfully";
     }
 
@@ -26,7 +26,7 @@ public class CandidateService {
 
     // Update
     public String updateCandidate(CandidateData candidate) {
-        candidateRepository.save(CandidateMapperUtil.candidateMapper(candidate));
+        candidateRepository.save(CandidateMapperUtil.candidateDataToEntity(candidate));
         return "Candidate profile updated successfully";
     }
 

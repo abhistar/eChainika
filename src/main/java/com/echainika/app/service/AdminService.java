@@ -51,7 +51,7 @@ public class AdminService {
         Page<CandidateEntity> candidates = candidateRepository.findAll(pageable);
 
         return AllCandidatesResponse.builder()
-                .candidates(candidates.stream().map(CandidateMapperUtil::candidateMapper).toList())
+                .candidates(candidates.stream().map(CandidateMapperUtil::candidateEntityToData).toList())
                 .totalPages(candidates.getTotalPages())
                 .build();
     }
@@ -66,7 +66,7 @@ public class AdminService {
         List<CandidateEntity> candidateEntityList = candidateRepository.findByRegistrationNumber(candidateRequest.getRegistrationNumber());
 
         if (candidateEntityList == null || candidateEntityList.isEmpty()) {
-            return CandidateMapperUtil.candidateMapper(candidateRequest);
+            return CandidateMapperUtil.candidateDataToEntity(candidateRequest);
         }
         return CandidateMapperUtil.updateCandidateMapper(candidateRequest, candidateEntityList.get(0));
     }
