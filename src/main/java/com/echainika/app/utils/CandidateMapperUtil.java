@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 @UtilityClass
 public final class CandidateMapperUtil {
-    public static CandidateEntity candidateMapper(CandidateData candidate) {
+    public static CandidateEntity candidateDataToEntity(CandidateData candidate) {
         return CandidateEntity.builder()
                 .registrationNumber(candidate.getRegistrationNumber())
                 .firstName(candidate.getFirstName())
@@ -92,7 +92,7 @@ public final class CandidateMapperUtil {
         return fieldValue != null ? fieldValue : defaultValue;
     }
 
-    public static CandidateData candidateMapper(CandidateEntity candidate) {
+    public static CandidateData candidateEntityToDto(CandidateEntity candidate) {
         return CandidateData.builder()
                 .registrationNumber(candidate.getRegistrationNumber())
                 .firstName(candidate.getFirstName())
