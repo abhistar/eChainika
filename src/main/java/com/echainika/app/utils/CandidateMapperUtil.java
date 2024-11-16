@@ -92,7 +92,7 @@ public final class CandidateMapperUtil {
         return fieldValue != null ? fieldValue : defaultValue;
     }
 
-    public static CandidateData candidateEntityToDto(CandidateEntity candidate) {
+    public static CandidateData candidateEntityToData(CandidateEntity candidate) {
         return CandidateData.builder()
                 .registrationNumber(candidate.getRegistrationNumber())
                 .firstName(candidate.getFirstName())

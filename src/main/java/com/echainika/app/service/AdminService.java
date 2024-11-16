@@ -51,7 +51,7 @@ public class AdminService {
         Page<CandidateEntity> candidates = candidateRepository.findAll(pageable);
 
         return AllCandidatesResponse.builder()
-                .candidates(candidates.stream().map(CandidateMapperUtil::candidateEntityToDto).toList())
+                .candidates(candidates.stream().map(CandidateMapperUtil::candidateEntityToData).toList())
                 .totalPages(candidates.getTotalPages())
                 .build();
     }
